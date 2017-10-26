@@ -2,8 +2,8 @@
 
 If you have a raspberry pi3 (RPI) you can use it as a router for the DE1SoC.
 - Connect an Ethernet Cable from RPI to DE1SoC
-- Make sure the RPI has wireless network connectivity - see Automatic network connections below
-- Enable port forwarding on RPI - see Port Forwarding below
+- Make sure the RPI has wireless network connectivity (See Automatic network connections below)
+- Enable port forwarding on RPI (see Port Forwarding below)
 
 One you have completed these steps, you can log in to the RPI (as pi) and into the DE1SoC (as root) as follows. rpi_ip_address is the wireless address of the RPI, 50444 is the forwarding port.
 
@@ -13,6 +13,54 @@ One you have completed these steps, you can log in to the RPI (as pi) and into t
 ```
 
 ## Port Forwarding on raspberry pi3
+
+### 1. Enable router network configuration on RPI
+
+In /etc/network/interfaces, replace the configuration for eth0 with the following. You may need to do this as root.
+
+```
+# when used as router port
+auto eth0
+iface eth0 inet static
+   address 192.168.10.1
+   netmask 255.255.255.0
+   network 192.168.10.0
+   broadcast 192.168.10.255
+```
+
+This selects a network of the form 192.168.10.x, with 192.168.10.1 reserved for the RPI.
+Your DE1SoC should be configured with a similar 192.168.10.x address. For example, in /etc/network/interfaces of DE1SoC you could put
+
+```
+# Wired or wireless interfaces
+auto eth0
+iface eth0 inet static
+   address 192.168.10.20
+   netmask 255.255.254.0
+   gateway 192.168.10.255
+   dns-nameservers 198.82.247.98 198.82.247.66
+```
+
+### 2. Enable port forwarding on the RPI
+
+As root, run the following set of commands. These are valid for the ip address configuration shown above.
+
+```
+iptables --flush
+iptables --table nat --flush
+iptables --delete-chain
+iptables --table nat --delete-chain
+iptables --table nat --append POSTROUTING --out-interface wlan0 -j MASQUERADE
+iptables --append FORWARD --in-interface wlan0 -j ACCEPT
+echo 1 > /proc/sys/net/ipv4/ip_forward
+
+# for DE1SOC (socfpga)
+iptables -t nat -A PREROUTING -p tcp -i wlan0 --dport 50444 -j DNAT --to 192.168.10.20:22
+iptables -t nat -A POSTROUTING -p tcp --dport 22 -j MASQUERADE
+```
+
+Once you run these commands, you can log in to the DE1SoC as shown on top of this page.
+
 
 ## Automatic network connections for raspberry pi3
 
