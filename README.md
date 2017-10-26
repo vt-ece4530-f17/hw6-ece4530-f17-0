@@ -6,7 +6,7 @@
 
 I am using a pi that boots up, connects to a wireless network, and emails its IP address to me. This is quite convenient if you move a setup frequently between networks, or if you don't want to deal with complex pi-network integration. The steps to follow
 
--1. Initialize the raspberry pi. I use Noobs to configure standard Raspbian
+### -1. Initialize the raspberry pi. I use Noobs to configure standard Raspbian
 
     https://www.raspberrypi.org/downloads/noobs/
 
@@ -17,9 +17,9 @@ SSH is turned off by default. Turn it on with
 -> select interfacing options
 -> enable ssh
 
-0. create new gmail account/password. This gmail account is used as the 'From' account that sends out IP addresses.
+### 0. create new gmail account/password. This gmail account is used as the 'From' account that sends out IP addresses.
 
-1. Configure mailing capabilities on raspberry:
+### 1. Configure mailing capabilities on raspberry:
 
     sudo apt-get install mailutils ssmtp
 
@@ -51,7 +51,8 @@ Modify /etc/wpa_supplicant/wpa_supplicant.conf
 
   This will enable the raspberry to connect to the nearest WiFi
 
-2. Configure the mailer (/etc/ssmtp/ssmtp.conf) and add the following lines
+### 2. Configure the mailer (/etc/ssmtp/ssmtp.conf) and add the following lines
+
 ```
     mailhub=smtp.gmail.com:587
     hostname=raspberrypi
@@ -60,12 +61,16 @@ Modify /etc/wpa_supplicant/wpa_supplicant.conf
     FromLineOverride=YES
     UseSTARTTLS=YES
 ```
-3. Create a script /home/pi/mailip.sh
+
+### 3. Create a script /home/pi/mailip.sh
+
 ```
     #!/bin/sh
     /sbin/ifconfig | /usr/bin/mail -s "Raspberry Hello" your_vt_email_goes_here
 ```
-4. In crontab add the mail command
+
+### 4. In crontab add the mail command
+
 ```
     @reboot sleep 60 && /home/pi/mailip.sh
 ```
