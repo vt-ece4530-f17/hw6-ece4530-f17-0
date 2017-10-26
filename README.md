@@ -40,7 +40,7 @@ Modify /etc/wpa_supplicant/wpa_supplicant.conf
        key_mgmt=WPA-EAP
        eap=PEAP
        identity="your-email-address@vt.edu"
-       password=hash:83020ec25531006fda8473a4d142da59
+       password=hash:83020ec25bbb006fda8bbba4d142d333
        phase2="MSCHAPV2"
      }
 ```
