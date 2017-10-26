@@ -2,8 +2,8 @@
 
 If you have a raspberry pi3 (RPI) you can use it as a router for the DE1SoC.
 1) Connect an Ethernet Cable from RPI to DE1SoC
-2) Make sure the RPI has wireless network connectivity (See Automatic network connections below)
-3) Enable port forwarding on RPI (see Port Forwarding below)
+2) Make sure the RPI has wireless network connectivity (See below - Automatic network connections for raspberry pi3)
+3) Enable port forwarding on RPI (see below - Port Forwarding on raspberry pi3)
 
 One you have completed these steps, you can log in to the RPI (as pi) and into the DE1SoC (as root) as follows. rpi_ip_address is the wireless address of the RPI, 50444 is the forwarding port.
 
