@@ -41,6 +41,30 @@ iface eth0 inet static
    dns-nameservers 198.82.247.98 198.82.247.66
 ```
 
+Note - when you modify /etc/network/interfaces on the RPI, be careful not to modify configuration of other interfaces. For example, a full /etc/network/interfaces on RPI looks like
+
+```
+auto lo
+iface lo inet loopback
+
+# when used as router port
+auto eth0
+iface eth0 inet static
+   address 192.168.10.1
+   netmask 255.255.255.0
+   network 192.168.10.0
+   broadcast 192.168.10.255
+
+allow-hotplug wlan0
+iface wlan0 inet dhcp
+    wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
+
+allow-hotplug wlan1
+iface wlan1 inet manual
+    wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
+```
+
+
 ### 2. Enable port forwarding on the RPI
 
 As root, run the following set of commands. These are valid for the ip address configuration shown above.
